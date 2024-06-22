@@ -1,14 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
  
 
 
 function TimeLapse(){
     const [time, setTime] = useState(0)
     const [running, setRunning] = useState(false)
+
+    useEffect(()=>{
+        let interval;
+        if(running){
+            interval = setInterval(()=>{
+                setTime((prevTime) => prevTime +10)
+            }, 10)
+        } else if (!running){
+            clearInterval(interval)
+        }
+        return () => clearInterval(interval)
+    }, [running])
+
+
     return(
         <>
         <div>
-            <span>{("0" + Math.floor((time/6000) % 60))}:</span>
+            <span>{("0" + Math.floor((time/6000) % 60)).slice(-2)}:</span>
             <span>{("0" + Math.floor((time/1000) % 60))}:</span>
             <span>{("0" + Math.floor((time/10) % 100))}:</span>
         </div>
